@@ -14,18 +14,15 @@ class OCRResult(TypedDict):
 
 
 def is_remote_file(file_path: str) -> bool:
-    """Проверяет, является ли файл удаленным URL"""
     return file_path.startswith(("http://", "https://"))
 
-
 def encode_image(image_path: str) -> str:
-    """Кодирует изображение в base64"""
     with open(image_path, "rb") as image_file:
         return base64.b64encode(image_file.read()).decode("utf-8")
 
 
 def get_system_prompt() -> str:
-    """Возвращает системный промпт для OCR"""
+    """System prompt for OCR"""
     return """Convert the image to Markdown. Include all content:
 - Headers, footers, subtexts
 - Images with alt text
@@ -40,16 +37,16 @@ def ocr(
         return_markdown: bool = False
 ) -> Union[str, OCRResult]:
     """
-    Конвертирует изображение в Markdown/JSON
+    Convert image to Markdown/JSON
 
     Args:
-        file_path: Путь к изображению или URL
-        api_key: API ключ Together AI
-        model: Используемая модель
-        return_markdown: Если True, возвращает только Markdown
+        file_path: Image path or URL
+        api_key: API key Together AI
+        model: model
+        return_markdown: If True - only Markdown
 
     Returns:
-        Markdown или JSON-структуру с результатами
+        Markdown or JSON
     """
     model_mapping = {
         "Llama-Vision-Free": "meta-llama/Llama-Vision-Free",

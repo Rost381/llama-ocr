@@ -8,41 +8,41 @@ from base import ocr
 
 
 def get_api_key(cli_api_key: Optional[str] = None) -> str:
-    """Получает API ключ в порядке приоритета: .env > аргумент > ввод"""
+    """Gets API key in priority order: .env > argument > input"""
     load_dotenv()
     env_key = os.getenv("TOGETHER_API_KEY")
     if env_key:
         return env_key
     if cli_api_key:
         return cli_api_key
-    return input("Введите Together AI API ключ: ").strip()
+    return input("Input Together AI API key: ").strip()
 
 
 def main():
     parser = argparse.ArgumentParser(
-        description="Конвертация изображений в Markdown/JSON через Llama Vision",
+        description="Converting Images to Markdown/JSON with Llama Vision",
         formatter_class=argparse.RawTextHelpFormatter
     )
-    parser.add_argument("file_path", help="Путь к изображению или URL")
-    parser.add_argument("--api-key", help="Together AI API ключ")
+    parser.add_argument("file_path", help="Image path or URL")
+    parser.add_argument("--api-key", help="Together AI API key")
     parser.add_argument(
         "--model",
         choices=["Llama-Vision-Free", "Llama-3.2-11B-Vision", "Llama-3.2-90B-Vision"],
         default="Llama-Vision-Free",
-        help="""Модель для обработки:
-- Llama-Vision-Free (бесплатная)
-- Llama-3.2-11B-Vision (платная)
-- Llama-3.2-90B-Vision (платная, самая точная)"""
+        help="""Model:
+- Llama-Vision-Free (Free)
+- Llama-3.2-11B-Vision (paid)
+- Llama-3.2-90B-Vision (paid, the most accurate)"""
     )
     parser.add_argument(
         "--markdown",
         action="store_true",
-        help="Вывести только Markdown (по умолчанию JSON)"
+        help="Only Markdown (JSON default)"
     )
     parser.add_argument(
         "--pretty",
         action="store_true",
-        help="Форматированный вывод JSON"
+        help="Formatting JSON"
     )
 
     args = parser.parse_args()
@@ -61,9 +61,8 @@ def main():
             print(json.dumps(result, indent=2 if args.pretty else None, ensure_ascii=False))
 
     except Exception as e:
-        print(f"Ошибка: {str(e)}", file=sys.stderr)
+        print(f"Error: {str(e)}", file=sys.stderr)
         sys.exit(1)
-
 
 if __name__ == "__main__":
     import sys
